@@ -21,7 +21,7 @@
             value="${searchWord}" autocomplete="off">
           <button type="submit">Tra cứu</button>
 
-          <c:if test="${not empty meaning}">
+          <c:if test="${meaning != null}">
             <div>
               <hr>
               <div>Tìm thấy kết quả: </div>
