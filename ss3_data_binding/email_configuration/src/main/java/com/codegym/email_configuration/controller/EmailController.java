@@ -3,6 +3,7 @@ package com.codegym.email_configuration.controller;
 import com.codegym.email_configuration.entity.Email;
 import com.codegym.email_configuration.service.EmailService;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,17 @@ public class EmailController {
         ModelAndView modelAndView = new ModelAndView("update");
         modelAndView.addObject("email", email);
         modelAndView.addObject("message", "Email updated successfully!");
+        return modelAndView;
+    }
+
+    @PostMapping("/error")
+    public ModelAndView error(@ModelAttribute("email") Email email, BindingResult bindingResult){
+        ModelAndView modelAndView;
+        if (bindingResult.hasErrors()){
+            modelAndView = new ModelAndView("form");
+        }else{
+            modelAndView = new ModelAndView("update");
+        }
         return modelAndView;
     }
 }

@@ -3,6 +3,9 @@
 <html>
 <head>
     <title>Setting</title>
+    <style>
+        .error {color: red;}
+    </style>
 </head>
 <body>
 <h1>Settings</h1>
@@ -32,11 +35,15 @@
                 </form:select>
 
                 emails per page
+                <br>
+                <form:errors path="pageSize" cssClass="error"/>
             </td>
         </tr>
         <tr>
             <td><form:label path="spamFilter">Spams Filter</form:label></td>
             <td><form:checkbox path="spamFilter"/> enable spam filter</td>
+            <br>
+            <form:errors path="spamFilter" cssClass="error"/>
         </tr>
         <tr>
             <td><form:label path="signature">Signature </form:label></td>
