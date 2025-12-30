@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/layout :: head">
+    <meta charset="UTF-8">
+    <title>Page</title>
+</head>
+<style>
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        text-decoration: none;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 16px;
+        height: 36px;
+        background-color: #4CAF50;
+        text-decoration: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-form input {
+        height: 36px;
+        width: 200px;
+    }
+</style>
+
+<body>
+    <h3>Customers</h3>
+
+    <div class="toolbar">
+        <a th:href="@{/customers/create}" class="btn">Add Customer</a>
+
+        <form th:action="@{/customers}" method="get" class="search-form">
+            <input type="text" name="search" th:value="${keyword}" placeholder="Search by name..." />
+            <button type="submit" class="btn">Search</button>
+            <a th:href="@{/customers}" class="btn">Clear</a>
+        </form>
+    </div>
+
+    <div th:if="${keyword != null and !keyword.isEmpty()}" style="margin-bottom: 10px; color: #666;">
+        <span>Found <strong th:text="${customers.size()}">0</strong> customer(s) matching "<strong
+                th:text="${keyword}"></strong>"</span>
+    </div>
+
+    <div class="notify">
+        <div th:if="${success}">
+            <span th:text="${success}"></span>
+        </div>
+    </div>
+
+    <table id="customers">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.getName()}"></td>
+                <td th:text="${customer.getEmail()}"></td>
+                <td th:text="${customer.getAddress()}"></td>
+                <td><a th:href="@{/customers/{id}/edit(id=${customer.getId()})}" class="btn" >Edit</a></td>
+                <td><a th:href="@{/customers/{id}/delete(id=${customer.getId()})}" class="btn" >Delete</a></td>
+                <td><a th:href="@{/customers/{id}/view(id=${customer.getId()})}" class="btn">View</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <footer th:replace="common/layout :: footer"></footer>
+
+</body>
+
+</html>
