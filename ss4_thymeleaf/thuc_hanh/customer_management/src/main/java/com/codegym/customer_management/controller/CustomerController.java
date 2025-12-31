@@ -4,11 +4,9 @@ import com.codegym.customer_management.entity.Customer;
 import com.codegym.customer_management.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -42,8 +40,23 @@ public class CustomerController {
     }
 
     @PostMapping("/save")
-    public String save(Customer customer, RedirectAttributes redirectAttributes){
-        customer.setId((int) (Math.random() * 10000));
+    public String save(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes, BindingResult bindingResult){
+        if (customer.getName().isEmpty()) {
+            bindingResult.rejectValue("name", null, "Name cannot be empty");
+        }
+
+        if (customer.getEmail().isEmpty()) {
+            bindingResult.rejectValue("email", null, "Email cannot be empty");
+        }
+
+        if (customer.getAddress().isEmpty()) {
+            bindingResult.rejectValue("address", null, "Address cannot be empty");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "customer/create";
+        }
+
         customerService.save(customer);
         redirectAttributes.addFlashAttribute("success", "Customer saved successfully!");
         return "redirect:/customers";
@@ -56,7 +69,23 @@ public class CustomerController {
     }
 
     @PostMapping("/update")
-    public String update(Customer customer, RedirectAttributes redirectAttributes){
+    public String update(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes, BindingResult bindingResult){
+        if (customer.getName().isEmpty()) {
+            bindingResult.rejectValue("name", null, "Name cannot be empty");
+        }
+
+        if (customer.getEmail().isEmpty()) {
+            bindingResult.rejectValue("email", null, "Email cannot be empty");
+        }
+
+        if (customer.getAddress().isEmpty()) {
+            bindingResult.rejectValue("address", null, "Address cannot be empty");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "customer/update";
+        }
+
         customerService.update(customer.getId(), customer);
         redirectAttributes.addFlashAttribute("success", "Customer updated successfully!");
         return "redirect:/customers";
@@ -69,8 +98,9 @@ public class CustomerController {
     }
 
     @PostMapping("/delete")
-    public String delete(Customer customer, RedirectAttributes redirectAttributes){
+    public String delete(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes){
         customerService.remove(customer.getId());
+
         redirectAttributes.addFlashAttribute("success", "Customer deleted successfully!");
         return "redirect:/customers";
     }
@@ -80,6 +110,5 @@ public class CustomerController {
         model.addAttribute("customer", customerService.findById(id));
         return "customer/view";
     }
-
 
 }
