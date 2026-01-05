@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/layout :: head">
+    <meta charset="UTF-8">
+    <title>Create Page</title>
+</head>
+<style>
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 16px;
+        height: 36px;
+        background-color: #4CAF50;
+        text-decoration: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+<body>
+    <h3>Add Customer</h3>
+    <p class="toolbar">
+        <a th:href="@{/customers}" class="btn">
+            Back to customer list
+        </a>
+    </p>
+
+    <div id="form">
+        <form th:action="@{/customers/save}" th:object="${customer}" method="post" novalidate="novalidate" >
+            <input type="hidden" th:field="*{id}" />
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" th:field="*{name}" />
+                <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                </span>
+            </div>
+            <div>
+                <label for="age">Age</label>
+                <input type="text" id="age" th:field="*{age}" />
+                <span style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">
+                </span>
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="text" id="email" th:field="*{email}" />
+                <span style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                </span>
+            </div>
+            <div>
+                <label for="address">Address</label>
+                <input type="text" id="address" th:field="*{address}" />
+                <span style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </div>
+            <input type="submit" value="Save" />
+        </form>
+    </div>
+    <footer th:replace="common/layout :: footer"></footer>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="common/layout :: head">
+    <title>DetailCustomer</title>
+</head>
+<style>
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 16px;
+        height: 36px;
+        background-color: #4CAF50;
+        text-decoration: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+<body>
+<h3>View Customer</h3>
+<p>
+    <a th:href="@{/customers}" class="btn">
+        Back to customer list
+    </a>
+</p>
+<div id="detail">
+    <div class="cus-detail">
+        <label>Name:</label>
+        <label th:text="${customer.name}"></label>
+    </div>
+    <div class="cus-detail">
+        <label>Age</label>
+        <label th:text="${customer.age}"></label>
+    </div>
+    <div class="cus-detail">
+        <label>Email:</label>
+        <label th:text="${customer.email}"></label>
+    </div>
+    <div class="cus-detail">
+        <label>Address:</label>
+        <label th:text="${customer.address}"></label>
+    </div>
+</div>
+<footer th:replace="common/layout :: footer"></footer>
+</body>
+</html>
