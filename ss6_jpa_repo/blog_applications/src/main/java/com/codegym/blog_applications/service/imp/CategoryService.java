@@ -3,6 +3,7 @@ package com.codegym.blog_applications.service.imp;
 import com.codegym.blog_applications.entity.Category;
 import com.codegym.blog_applications.repository.ICategoryRepository;
 import com.codegym.blog_applications.service.ICategoryService;
+import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category findById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+        return categoryRepository.findById(id).orElseThrow(() -> new NoResultException("Not found with id: " + id + ""));
     }
 
     @Override

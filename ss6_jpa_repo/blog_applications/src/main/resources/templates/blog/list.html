@@ -15,7 +15,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-dark bg-primary shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/blogs">
             <i class="bi bi-journal-text"></i> Blog Technology
         </a>
         <div>
@@ -49,11 +49,12 @@
                            placeholder="Search blog..."
                            style="min-width: 250px; flex: 2;">
 
-                    <select class="form-select" name="categoryId" style="max-width: 180px; flex: 1;">
+                    <select class="form-select" name="categoryId" style="max-width: 180px; flex: 1;" th:value="${categoryId}">
                         <option value="">All Categories</option>
                         <option th:each="cat : ${categories}"
                                 th:value="${cat.id}"
-                                th:text="${cat.name}">
+                                th:text="${cat.name}"
+                                th:selected="${categoryId != null && cat.id == categoryId}">
                         </option>
                     </select>
 

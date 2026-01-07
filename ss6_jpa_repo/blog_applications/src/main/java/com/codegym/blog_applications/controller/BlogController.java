@@ -4,6 +4,7 @@ import com.codegym.blog_applications.entity.Blog;
 import com.codegym.blog_applications.entity.Category;
 import com.codegym.blog_applications.service.IBlogService;
 import com.codegym.blog_applications.service.ICategoryService;
+import jakarta.persistence.NoResultException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,9 @@ public class BlogController {
     }
 
     @GetMapping("")
-    public String showAllBlogs(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size) {
+    public String showAllBlogs(Model model,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "6") int size) {
         model.addAttribute("blogs", blogService.getAllBlog(size, page));
         model.addAttribute("categories", categoryService.findAll());
         return "blog/list";
@@ -82,27 +85,6 @@ public class BlogController {
         return "blog/update";
     }
 
-    @GetMapping("/categories/{id}")
-    public String showBlogsByCategory(@PathVariable Long id,
-                                      Model model,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "6") int size) {
-        Category category = categoryService.findById(id);
-
-        if (category == null) {
-            return "redirect:/blogs";
-        }
-
-        Page<Blog> blogPage = blogService.findByCategoryId(size, page, id);
-
-        model.addAttribute("blogs", blogPage);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", blogPage.getTotalPages());
-        model.addAttribute("selectedCategory", category);
-        model.addAttribute("categories", categoryService.findAll());
-        return "blog/list";
-    }
-
     @GetMapping("/search")
     public String search(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                          @RequestParam(value = "categoryId", required = false) Long categoryId,
@@ -111,23 +93,18 @@ public class BlogController {
                          Model model){
         Page<Blog> blogPage;
 
-        if ((keyword != null && !keyword.trim().isEmpty()) && categoryId != null) {
+        keyword = keyword.trim();
+        if (categoryId == null) {
+            blogPage = blogService.searchByTitle(size, page, keyword);
+        } else {
             blogPage = blogService.searchByTitleAndCategory(size, page, keyword, categoryId);
         }
-        else if (keyword != null && !keyword.trim().isEmpty()) {
-            blogPage = blogService.searchByTitle(size, page, keyword);
-        }
-        else if (categoryId != null) {
-            blogPage = blogService.findByCategoryId(size, page, categoryId);
-        }
-        else {
-            blogPage = blogService.getAllBlog(size, page);
-        }
+
         model.addAttribute("blogs", blogPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPage.getTotalPages());
         model.addAttribute("keyword", keyword);
-        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("categoryId", categoryId);
         model.addAttribute("categories", categoryService.findAll());
         return "blog/list";
     }
@@ -142,19 +119,15 @@ public class BlogController {
             bindingResult.rejectValue("author", null, "Author author cannot be empty");
         }
 
-
         if(bindingResult.hasErrors()) {
             return "blog/update";
         }
 
         Blog existingBlog = blogService.findById(blog.getId());
-
-        if (existingBlog != null) {
-            blog.setCreatedDate(existingBlog.getCreatedDate());
-            blog.setUpdatedDate(LocalDateTime.now());
-        }
-
         Category category = categoryService.findById(categoryId);
+
+        blog.setCreatedDate(existingBlog.getCreatedDate());
+        blog.setUpdatedDate(LocalDateTime.now());
         blog.setCategory(category);
 
         blogService.update(blog);

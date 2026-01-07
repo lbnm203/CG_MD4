@@ -32,6 +32,7 @@ public class GlobalExceptionHandler {
             NoResultException.class,
             EntityNotFoundException.class,
             NoHandlerFoundException.class,
+            NoResourceFoundException.class,
     })
     public String handleNotFound(Exception ex) {
         ex.printStackTrace();
@@ -39,9 +40,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            Exception.class,
-            NoResourceFoundException.class,
-            TemplateInputException.class
+            Exception.class
     })
     public String handleServerError(Exception ex) {
         ex.printStackTrace();
