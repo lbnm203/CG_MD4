@@ -1,13 +1,18 @@
-package com.codegym.blog_applications.service;
+package com.codegym.blog_applications.service.imp;
 
 import com.codegym.blog_applications.entity.Blog;
 import com.codegym.blog_applications.repository.IBlogRepository;
+import com.codegym.blog_applications.service.IBlogService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BlogService implements IBlogService{
+public class BlogService implements IBlogService {
     private final IBlogRepository blogRepository;
 
     public BlogService(IBlogRepository blogRepository) {
@@ -17,6 +22,12 @@ public class BlogService implements IBlogService{
     @Override
     public List<Blog> findAll() {
         return blogRepository.findAll();
+    }
+
+    @Override
+    public Page<Blog> getAllBlog(int size, int page) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        return blogRepository.findAllBlog(PageRequest.of(page, size, sort));
     }
 
     @Override
@@ -58,7 +69,23 @@ public class BlogService implements IBlogService{
     }
 
     @Override
-    public List<Blog> searchByTitle(String title) {
-        return blogRepository.findAllByTitleContaining(title);
+    public Page<Blog> searchByTitle(int size, int page, String title) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return blogRepository.findAllByTitleContainingIgnoreCase(title, pageable);
+    }
+
+    @Override
+    public Page<Blog> findByCategoryId(int size, int page, Long categoryId) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return blogRepository.findByCategoryId(categoryId, pageable);
+    }
+
+    @Override
+    public Page<Blog> searchByTitleAndCategory(int size, int page, String title, Long categoryId) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return blogRepository.findByTitleContainingIgnoreCaseAndCategoryId(title, categoryId, pageable);
     }
 }

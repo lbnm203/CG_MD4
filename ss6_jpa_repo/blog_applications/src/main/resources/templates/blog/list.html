@@ -19,11 +19,14 @@
             <i class="bi bi-journal-text"></i> Blog Technology
         </a>
         <div>
-            <a href="/blogs" class="btn btn-outline-light btn-sm me-2">
+            <a href="/blogs" class="btn btn-light btn-sm">
                 <i class="bi bi-list-ul"></i> Blogs
             </a>
             <a href="/categories" class="btn btn-light btn-sm">
                 <i class="bi bi-tags"></i> Categories
+            </a>
+            <a href="/blogs/create" class="btn bold btn-success btn-sm">
+                <i class="bi bi-plus-circle"></i> New Blog
             </a>
         </div>
     </div>
@@ -31,15 +34,38 @@
 
 <!-- Main Content -->
 <div class="container mt-4">
-
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-primary">
             <i class="bi bi-list-ul"></i> Blog List
         </h2>
-        <a href="/blogs/create" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> New Blog
-        </a>
+        <div class="d-flex gap-3">
+            <form action="/blogs/search" method="get" class="flex-grow-1">
+                <div class="input-group d-flex gap-2">
+                    <input type="text"
+                           class="form-control"
+                           name="keyword"
+                           th:value="${keyword}"
+                           placeholder="Search blog..."
+                           style="min-width: 250px; flex: 2;">
+
+                    <select class="form-select" name="categoryId" style="max-width: 180px; flex: 1;">
+                        <option value="">All Categories</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.id}"
+                                th:text="${cat.name}">
+                        </option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                    <a th:href="@{/blogs}" class="btn btn-primary clearfix">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Success Message -->
@@ -70,7 +96,7 @@
 
                     <p class="card-text text-muted mb-2">
                         <i class="bi bi-tag-fill"></i>
-                        <small th:text="${blog.category != null ? blog.category.name : 'None'}">Category</small>
+                        <small class="badge bg-success" th:text="${blog.category != null ? blog.category.name : 'None'}">Category</small>
                     </p>
 
                     <p class="card-text" th:text="${#strings.abbreviate(blog.content, 100)}">
@@ -106,6 +132,22 @@
             </div>
         </div>
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item" th:if="${blogs.hasPrevious()}">
+                <a class="page-link" th:href="@{/blogs(page=${blogs.number - 1})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item"  th:if="${blogs.hasNext()}">
+                <a class="page-link" th:href="@{/blogs(page=${blogs.number + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <!-- Bootstrap 5 JS Bundle -->

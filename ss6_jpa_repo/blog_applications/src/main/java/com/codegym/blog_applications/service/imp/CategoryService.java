@@ -1,13 +1,14 @@
-package com.codegym.blog_applications.service;
+package com.codegym.blog_applications.service.imp;
 
 import com.codegym.blog_applications.entity.Category;
 import com.codegym.blog_applications.repository.ICategoryRepository;
+import com.codegym.blog_applications.service.ICategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
     private final ICategoryRepository categoryRepository;
 
     public CategoryService(ICategoryRepository categoryRepository) {

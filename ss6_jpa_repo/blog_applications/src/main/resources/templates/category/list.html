@@ -17,7 +17,7 @@
             <i class="bi bi-journal-text"></i> Blog Technology
         </a>
         <div>
-            <a href="/blogs" class="btn btn-outline-light btn-sm me-2">
+            <a href="/blogs" class="btn btn-light btn-sm">
                 <i class="bi bi-list-ul"></i> Blogs
             </a>
             <a href="/categories" class="btn btn-light btn-sm">
@@ -78,7 +78,7 @@
                         <div class="btn-group btn-group-sm d-flex gap-2" role="group">
                             <a th:href="@{/categories/{id}/update(id=${category.id})}"
                                class="btn btn-outline-warning">
-                                <i class="bi bi-pencil"> Edit</i>
+                                <i class="bi bi-pencil"></i> Edit
                             </a>
                             <button type="button"
                                     class="btn btn-outline-danger"
@@ -87,7 +87,7 @@
                                     th:data-category-id="${category.id}"
                                     th:data-category-name="${category.name}"
                                     onclick="prepareDelete(this)">
-                                <i class="bi bi-trash"> Delete</i>
+                                <i class="bi bi-trash"></i> Delete
                             </button>
                         </div>
                     </td>
