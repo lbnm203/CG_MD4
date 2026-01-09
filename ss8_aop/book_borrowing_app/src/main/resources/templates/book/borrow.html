@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mượn sách thành công</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light">
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-check-circle"></i> Mượn sách thành công
+            </h4>
+        </div>
+
+        <div class="card-body">
+            <!-- Thông báo thành công -->
+            <div class="alert alert-success text-center">
+                <h5>Bạn đã mượn sách thành công!</h5>
+                <p class="mb-0">Vui lòng lưu mã dưới đây để trả sách.</p>
+            </div>
+
+            <!-- Mã mượn sách -->
+            <div class="text-center my-4 p-4 bg-light border rounded">
+                <p class="text-muted mb-2">Mã mượn sách của bạn:</p>
+                <h1 class="text-success fw-bold" th:text="${borrowCode}">12345</h1>
+            </div>
+
+            <!-- Thông tin sách -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="bi bi-book"></i> Thông tin sách đã mượn
+                </div>
+                <div class="card-body">
+                    <p><strong>Tên sách:</strong> <span th:text="${book.title}">Tên sách</span></p>
+                    <p><strong>Tác giả:</strong> <span th:text="${book.author}">Tác giả</span></p>
+                    <p class="mb-0"><strong>Số lượng còn lại:</strong> <span th:text="${book.quantity}">0</span> cuốn</p>
+                </div>
+            </div>
+
+            <!-- Các nút -->
+            <div class="d-grid gap-2">
+                <a th:href="@{/books/return}" class="btn btn-primary">
+                    <i class="bi bi-arrow-return-left"></i> Trả sách ngay
+                </a>
+                <a th:href="@{/books}" class="btn btn-secondary">
+                    <i class="bi bi-list"></i> Về danh sách sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
