@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white py-3">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-cart-fill"></i> Giỏ hàng của bạn
+                </h1>
+            </div>
+            <div class="card-body">
+                <!-- Thông báo thành công -->
+                <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${message}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Thông báo lỗi -->
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Nút quay lại -->
+                <div class="mb-4">
+                    <a th:href="@{/product}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Tiếp tục mua hàng
+                    </a>
+                </div>
+                <hr class="my-4">
+
+                <!-- Bảng giỏ hàng -->
+
+                <!-- Bảng giỏ hàng -->
+                <div th:if="${cart != null && cart.items != null && !cart.items.isEmpty()}" class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Hình ảnh</th>
+                                <th class="text-center">Tên sản phẩm</th>
+                                <th class="text-center">Đơn giá</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-center">Thành tiền</th>
+                                <th class="text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entry, iterStat : ${cart.items}">
+                                <td class="text-center" th:text="${iterStat.count}"></td>
+                                <td class="text-center">
+                                    <img th:if="${products[entry.key] != null && products[entry.key].imageUrl != null}"
+                                        th:src="${products[entry.key].imageUrl}" alt="Product Image"
+                                        class="img-thumbnail"
+                                        style="max-width: 80px; max-height: 80px; object-fit: cover;">
+                                    <span
+                                        th:unless="${products[entry.key] != null && products[entry.key].imageUrl != null}"
+                                        class="text-muted">
+                                        <i class="bi bi-image" style="font-size: 40px;"></i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong th:text="${products[entry.key] != null ? products[entry.key].name : 'N/A'}">
+                                        Tên sản phẩm
+                                    </strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        Mã: <span
+                                            th:text="${products[entry.key] != null ? products[entry.key].code : 'N/A'}"></span>
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="text-primary fw-bold"
+                                        th:text="${products[entry.key] != null ? #numbers.formatDecimal(products[entry.key].price, 0, 'COMMA', 0, 'POINT') + ' ₫' : 'N/A'}">
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="input-group input-group-sm justify-content-center"
+                                        style="max-width: 120px; margin: 0 auto;">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            th:onclick="'updateQuantity(' + ${entry.key} + ', ' + ${entry.value - 1} + ')'">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="text" class="form-control text-center" th:value="${entry.value}"
+                                            readonly>
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            th:onclick="'updateQuantity(' + ${entry.key} + ', ' + ${entry.value + 1} + ')'">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <strong class="text-danger"
+                                        th:text="${products[entry.key] != null ? #numbers.formatDecimal(products[entry.key].price * entry.value, 0, 'COMMA', 0, 'POINT') + ' ₫' : 'N/A'}">
+                                    </strong>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        th:attr="data-product-id=${entry.key}, data-product-name=${products[entry.key] != null ? products[entry.key].name : 'sản phẩm này'}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <td colspan="5" class="text-end fw-bold fs-5">Tổng cộng:</td>
+                                <td class="text-center">
+                                    <strong class="text-danger fs-5"
+                                        th:text="${totalPrice != null ? #numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT') + ' ₫' : '0 ₫'}">
+                                        2.500.000 ₫
+                                    </strong>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <!-- Nút hành động -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <a th:href="@{/cart/checkout}" class="btn btn-success w-100">
+                                <i class="bi bi-credit-card me-2"></i>Thanh toán
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${cart == null || cart.items == null || cart.items.isEmpty()}" class="text-center py-5">
+                    <h3 class="mt-4 text-muted">Giỏ hàng của bạn đang trống</h3>
+                    <a th:href="@{/product}" class="btn btn-primary btn-lg mt-3">
+                        <i class="bi bi-shop me-2"></i>Thêm sản phẩm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Xác nhận xóa
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Bạn có chắc chắn muốn xóa <strong id="productNameToDelete">sản phẩm này</strong>
+                        khỏi giỏ hàng?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>Hủy
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="bi bi-trash me-2"></i>Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let productIdToDelete = null;
+
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                productIdToDelete = button.getAttribute('data-product-id');
+                const productName = button.getAttribute('data-product-name');
+                document.getElementById('productNameToDelete').textContent = productName;
+            });
+        }
+
+        function confirmDelete() {
+            if (productIdToDelete) {
+                window.location.href = `/cart/remove/${productIdToDelete}`;
+            }
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) {
+                const deleteButton = document.querySelector(`button[data-product-id="${productId}"]`);
+                if (deleteButton) {
+                    const productName = deleteButton.getAttribute('data-product-name');
+                    productIdToDelete = productId;
+                    document.getElementById('productNameToDelete').textContent = productName;
+                    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                    modal.show();
+                }
+                return;
+            }
+            window.location.href = `/cart/update/${productId}?quantity=${newQuantity}`;
+        }
+    </script>
+</body>
+
+</html>
