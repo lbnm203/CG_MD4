@@ -1,7 +1,8 @@
-package com.codegym.blog_applications.controller;
+package com.codegym.th_postman.controller;
 
-import com.codegym.blog_applications.entity.Category;
-import com.codegym.blog_applications.service.ICategoryService;
+
+import com.codegym.th_postman.entity.Category;
+import com.codegym.th_postman.service.ICategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,7 +70,7 @@ public class CategoryController {
     public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes){
         Category category = categoryService.findById(id);
 
-        if(category == null){
+        if(category != null){
             categoryService.delete(id);
             redirectAttributes.addFlashAttribute("message", "Category deleted successfully!");
         } else {

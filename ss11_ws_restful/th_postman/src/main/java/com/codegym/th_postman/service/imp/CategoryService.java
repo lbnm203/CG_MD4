@@ -1,9 +1,13 @@
-package com.codegym.blog_applications.service.imp;
+package com.codegym.th_postman.service.imp;
 
-import com.codegym.blog_applications.entity.Category;
-import com.codegym.blog_applications.repository.ICategoryRepository;
-import com.codegym.blog_applications.service.ICategoryService;
+
+import com.codegym.th_postman.entity.Category;
+import com.codegym.th_postman.repository.ICategoryRepository;
+import com.codegym.th_postman.service.ICategoryService;
 import jakarta.persistence.NoResultException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,12 @@ public class CategoryService implements ICategoryService {
     @Override
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    @Override
+    public Page<Category> getAllCategory(int size, int page) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        return categoryRepository.findAll(PageRequest.of(page, size, sort));
     }
 
     @Override

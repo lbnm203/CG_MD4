@@ -1,4 +1,4 @@
-package com.codegym.blog_applications.exception;
+package com.codegym.th_postman.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import org.thymeleaf.exceptions.TemplateInputException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

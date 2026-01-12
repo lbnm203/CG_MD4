@@ -1,4 +1,4 @@
-package com.codegym.blog_applications.entity;
+package com.codegym.th_postman.entity;
 
 import jakarta.persistence.*;
 

@@ -1,13 +1,11 @@
-package com.codegym.blog_applications.controller;
+package com.codegym.th_postman.controller;
 
-import com.codegym.blog_applications.entity.Blog;
-import com.codegym.blog_applications.entity.Category;
-import com.codegym.blog_applications.service.IBlogService;
-import com.codegym.blog_applications.service.ICategoryService;
-import jakarta.persistence.NoResultException;
+
+import com.codegym.th_postman.entity.Blog;
+import com.codegym.th_postman.entity.Category;
+import com.codegym.th_postman.service.IBlogService;
+import com.codegym.th_postman.service.ICategoryService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

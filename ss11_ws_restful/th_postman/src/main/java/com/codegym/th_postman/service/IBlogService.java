@@ -1,9 +1,8 @@
-package com.codegym.blog_applications.service;
+package com.codegym.th_postman.service;
 
 
-import com.codegym.blog_applications.entity.Blog;
+import com.codegym.th_postman.entity.Blog;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;

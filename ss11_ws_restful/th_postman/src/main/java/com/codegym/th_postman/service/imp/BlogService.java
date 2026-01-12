@@ -1,14 +1,16 @@
-package com.codegym.blog_applications.service.imp;
+package com.codegym.th_postman.service.imp;
 
-import com.codegym.blog_applications.entity.Blog;
-import com.codegym.blog_applications.repository.IBlogRepository;
-import com.codegym.blog_applications.service.IBlogService;
+
+import com.codegym.th_postman.repository.IBlogRepository;
+import com.codegym.th_postman.service.IBlogService;
 import jakarta.persistence.NoResultException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import com.codegym.th_postman.entity.Blog;
+
 
 import java.util.List;
 import java.util.Optional;

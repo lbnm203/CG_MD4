@@ -1,11 +1,14 @@
-package com.codegym.blog_applications.service;
+package com.codegym.th_postman.service;
 
-import com.codegym.blog_applications.entity.Category;
+
+import com.codegym.th_postman.entity.Category;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ICategoryService {
     List<Category> findAll();
+    Page<Category> getAllCategory(int size, int page);
     Category findById(Long id);
     boolean save(Category category);
     boolean update(Category category);
