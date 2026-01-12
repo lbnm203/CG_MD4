@@ -76,67 +76,8 @@
         <!-- Blog List -->
         <div id="blogListContainer" class="row">
             <div th:replace="~{blog/fragments/blog_list_fragment :: blogList}"></div>
-            <!--            &lt;!&ndash; Kiểm tra nếu không có blog &ndash;&gt;-->
-            <!--            <div th:if="${#lists.isEmpty(blogs)}" class="col-12">-->
-            <!--                <div class="alert alert-info text-center">-->
-            <!--                    <i class="bi bi-info-circle"></i> Dont have any Blog - Let create your first Blog!-->
-            <!--                </div>-->
-            <!--            </div>-->
-
-            <!--            &lt;!&ndash; Hiển thị danh sách blog &ndash;&gt;-->
-            <!--            <div th:each="blog : ${blogs}" class="col-md-6 col-lg-4 mb-4">-->
-            <!--                <div class="card h-100 shadow-sm hover-card">-->
-            <!--                    <div class="card-body">-->
-            <!--                        <h5 class="card-title text-primary" th:text="${blog.title}">Blog title</h5>-->
-
-            <!--                        <p class="card-text text-muted mb-2">-->
-            <!--                            <i class="bi bi-person-fill"></i>-->
-            <!--                            <small th:text="${blog.author}">Author</small>-->
-            <!--                        </p>-->
-
-            <!--                        <p class="card-text text-muted mb-2">-->
-            <!--                            <i class="bi bi-tag-fill"></i>-->
-            <!--                            <small class="badge bg-success"-->
-            <!--                                th:text="${blog.category != null ? blog.category.name : 'None'}">Category</small>-->
-            <!--                        </p>-->
-
-            <!--                        <p class="card-text" th:text="${#strings.abbreviate(blog.content, 100)}">-->
-            <!--                            Blog content will be show here...-->
-            <!--                        </p>-->
-
-            <!--                        <div class="text-muted small mb-3">-->
-            <!--                            <i class="bi bi-calendar-event"></i>-->
-            <!--                            Create Date: <span-->
-            <!--                                th:text="${#temporals.format(blog.createdDate, 'dd/MM/yyyy HH:mm')}"></span>-->
-            <!--                            <br><br>-->
-            <!--                            <i class="bi bi-pencil-square"></i>-->
-            <!--                            Update Date: <span-->
-            <!--                                th:text="${#temporals.format(blog.updatedDate, 'dd/MM/yyyy HH:mm')}"></span>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-
-            <!--                    <div class="card-footer bg-white border-top-0">-->
-            <!--                        <div class="d-flex gap-2">-->
-            <!--                            <a th:href="@{/blogs/{id}/detail(id=${blog.id})}"-->
-            <!--                                class="btn btn-sm btn-outline-primary flex-fill">-->
-            <!--                                <i class="bi bi-eye"></i> View-->
-            <!--                            </a>-->
-            <!--                            <button type="button"-->
-            <!--                                    class="btn btn-sm btn-outline-danger flex-fill"-->
-            <!--                                    data-bs-toggle="modal"-->
-            <!--                                    data-bs-target="#deleteModal"-->
-            <!--                                    th:attr="data-id=${blog.getId()},-->
-            <!--                                            data-title=${blog.getTitle()},-->
-            <!--                                            data-author=${blog.getAuthor()}"-->
-            <!--                                    th:onclick="prepareDelete(this)">-->
-            <!--                                <i class="bi bi-trash"></i> Delete-->
-            <!--                            </button>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
         </div>
-        <nav aria-label="Page navigation example">
+        <!-- <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item" th:if="${blogs.hasPrevious()}">
                     <a class="page-link" th:href="@{/blogs(page=${blogs.number - 1})}" aria-label="Previous">
@@ -151,23 +92,17 @@
                     </a>
                 </li>
             </ul>
-        </nav>
+        </nav> -->
     </div>
+    <div class="text-center my-4">
+        <button id="loadMoreBtn" class="btn btn-primary btn-lg">
+            <i class="bi bi-arrow-down-circle"></i> Tải thêm
+        </button>
+    </div>
+
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom CSS for hover effect -->
-    <!--    <style>-->
-    <!--        .hover-card {-->
-    <!--            transition: transform 0.2s, box-shadow 0.2s;-->
-    <!--        }-->
-
-    <!--        .hover-card:hover {-->
-    <!--            transform: translateY(-5px);-->
-    <!--            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;-->
-    <!--        }-->
-    <!--    </style>-->
 
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -216,41 +151,7 @@
             deleteForm.action = '/blogs/' + blogId + '/delete';
         }
     </script>
-    <script>
-        $(document).ready(function () {
-            $('#searchForm').submit(function (event) {
-                event.preventDefault();
-
-                const keyword = $('input[name="keyword"]').val();
-                const categoryId = $('select[name="categoryId"]').val();
-
-                $.ajax({
-                    url: '/blogs/search-ajax',
-                    method: 'GET',
-                    data: {
-                        keyword: keyword,
-                        categoryId: categoryId,
-                        page: 0,
-                        size: 6
-                    },
-                    success: function (response) {
-                        $('#blogListContainer').html(response);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Lỗi khi tìm kiếm:', error);
-                        $('#blogListContainer').html(`
-                    <div class="col-12">
-                        <div class="alert alert-danger text-center">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!
-                        </div>
-                    </div>
-                `);
-                    }
-                })
-            });
-        });
-    </script>
+    <script th:src="@{/ajax.js}"></script>
 </body>
 
 </html>

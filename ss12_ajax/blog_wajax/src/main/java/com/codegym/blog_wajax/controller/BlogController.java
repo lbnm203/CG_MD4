@@ -108,33 +108,15 @@ public class BlogController {
             blogPage = blogService.searchByTitleAndCategory(size, page, keyword, categoryId);
         }
 
-        model.addAttribute("blogs", blogPage);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", blogPage.getTotalPages());
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("categoryId", categoryId);
-        model.addAttribute("categories", categoryService.findAll());
-        return "blog/list";
-    }
-
-
-    @GetMapping("/search-ajax")
-    public String searchAjax(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                             @RequestParam(value = "categoryId", required = false) Long categoryId,
-                             @RequestParam(value = "page", defaultValue = "0") int page,
-                             @RequestParam(value = "size", defaultValue = "6") int size,
-                             Model model) {
-        Page<Blog> blogPage;
-
-        keyword = keyword.trim();
-        if (categoryId == null) {
-            blogPage = blogService.searchByTitle(size, page, keyword);
-        } else {
-            blogPage = blogService.searchByTitleAndCategory(size, page, keyword, categoryId);
-        }
+        // model.addAttribute("blogs", blogPage);
+        // model.addAttribute("currentPage", page);
+        // model.addAttribute("totalPages", blogPage.getTotalPages());
+        // model.addAttribute("keyword", keyword);
+        // model.addAttribute("categoryId", categoryId);
+        // model.addAttribute("categories", categoryService.findAll());
 
         model.addAttribute("blogs", blogPage.getContent());
-
+        // return "blog/list";
         return "blog/fragments/blog_list_fragment :: blogList";
     }
 
@@ -144,8 +126,6 @@ public class BlogController {
                            Model model) {
         Page<Blog> blogPage = blogService.getAllBlog(size, page);
         model.addAttribute("blogs", blogPage.getContent());
-        
-        // Trả về fragment chứa danh sách blog
         return "blog/fragments/blog_list_fragment :: blogList";
     }
 
