@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <th:block th:fragment="blogList">
+
+        <div th:if="${#lists.isEmpty(blogs)}" class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle"></i> Không tìm thấy blog nào phù hợp!
+            </div>
+        </div>
+
+        <!-- Hiển thị danh sách blog -->
+        <div th:each="blog : ${blogs}" class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body">
+                    <h5 class="card-title text-primary" th:text="${blog.title}">Blog title</h5>
+
+                    <p class="card-text text-muted mb-2">
+                        <i class="bi bi-person-fill"></i>
+                        <small th:text="${blog.author}">Author</small>
+                    </p>
+
+                    <p class="card-text text-muted mb-2">
+                        <i class="bi bi-tag-fill"></i>
+                        <small class="badge bg-success"
+                            th:text="${blog.category != null ? blog.category.name : 'None'}">Category</small>
+                    </p>
+
+                    <p class="card-text" th:text="${#strings.abbreviate(blog.content, 100)}">
+                        Blog content will be show here...
+                    </p>
+
+                    <div class="text-muted small mb-3">
+                        <i class="bi bi-calendar-event"></i>
+                        Create Date: <span th:text="${#temporals.format(blog.createdDate, 'dd/MM/yyyy HH:mm')}"></span>
+                        <br><br>
+                        <i class="bi bi-pencil-square"></i>
+                        Update Date: <span th:text="${#temporals.format(blog.updatedDate, 'dd/MM/yyyy HH:mm')}"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white border-top-0">
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/blogs/{id}/detail(id=${blog.id})}"
+                            class="btn btn-sm btn-outline-primary flex-fill">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                        <button type="button" class="btn btn-sm btn-outline-danger flex-fill" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal" th:attr="data-id=${blog.getId()},
+                                data-title=${blog.getTitle()},
+                                 data-author=${blog.getAuthor()}" th:onclick="prepareDelete(this)">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
+</body>
+
+</html>

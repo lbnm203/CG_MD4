@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Blog mới</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/blogs">
+            <i class="bi bi-journal-text"></i> Blog Technology
+        </a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Card Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Create New Blog
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Form -->
+                    <form th:action="@{/blogs/create}" th:object="${blog}" method="post">
+
+                        <!-- Tiêu đề -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-bold">
+                                <i class="bi bi-card-heading"></i> Title
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''"
+                                   id="title"
+                                   th:field="*{title}"
+                                   placeholder="Enter blog title...">
+
+                            <!-- Error message -->
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                                Title Error
+                            </div>
+                        </div>
+
+                        <!-- Tác giả -->
+                        <div class="mb-3">
+                            <label for="author" class="form-label fw-bold">
+                                <i class="bi bi-person-fill"></i> Author
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('author')} ? 'is-invalid' : ''"
+                                   id="author"
+                                   th:field="*{author}"
+                                   placeholder="Enter author...">
+
+                            <!-- Error message -->
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">
+                                Author Error
+                            </div>
+                        </div>
+
+                        <!-- Danh mục -->
+                        <div class="mb-3">
+                            <label for="categoryId" class="form-label fw-bold">
+                                <i class="bi bi-tag-fill"></i> Category
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="categoryId" name="categoryId" required>
+                                <option value="">-- Choose Category --</option>
+                                <option th:each="cat : ${categories}"
+                                        th:value="${cat.id}"
+                                        th:text="${cat.name}"
+                                        th:selected="${blog.category != null && cat.id == blog.category.id}">
+                                    Category
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Nội dung -->
+                        <div class="mb-4">
+                            <label for="content" class="form-label fw-bold">
+                                <i class="bi bi-file-text"></i> Content
+                            </label>
+                            <textarea class="form-control"
+                                      id="content"
+                                      th:field="*{content}"
+                                      rows="8"
+                                      placeholder="Enter your blog content..."></textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="/blogs" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="reset" class="btn btn-warning">
+                                <i class="bi bi-arrow-counterclockwise"></i> Refresh
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Create
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
